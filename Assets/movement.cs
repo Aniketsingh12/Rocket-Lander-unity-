@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class movement : MonoBehaviour
 {
@@ -9,10 +10,12 @@ public class movement : MonoBehaviour
     [SerializeField] float mainThrust = 100;
     [SerializeField] float rotateThrust = 100;
     AudioSource audio;
+    
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         audio = GetComponent<AudioSource>();
+        
     }
 
     // Update is called once per frame
@@ -57,4 +60,46 @@ public class movement : MonoBehaviour
         rb.freezeRotation = true;
         transform.Rotate(Vector3.forward * rotates * Time.deltaTime);
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+            case "Start":
+                Debug.Log("ON START");
+                break;
+            case "Finish":
+                next();
+                break;
+            case "fuel":
+                Debug.Log("Got fuel");
+                break;
+            default:
+                desstroyed();
+                Invoke("restart" , 1);
+                break;
+
+        }
+    }
+    void desstroyed()
+    {
+        GetComponent<movement>().enabled = true;
+    }
+    void restart()
+    {
+          SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    void next()
+    {
+        int nextscene = SceneManager.GetActiveScene().buildIndex + 1;
+        if(nextscene == SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(0);
+        }
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        
+    }
+
+
 }
+
