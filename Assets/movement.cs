@@ -9,6 +9,7 @@ public class movement : MonoBehaviour
     Rigidbody rb;
     [SerializeField] float mainThrust = 100;
     [SerializeField] float rotateThrust = 100;
+    [SerializeField] AudioClip boost;
     AudioSource audio;
     
     void Start()
@@ -31,7 +32,7 @@ public class movement : MonoBehaviour
             rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
             if (!audio.isPlaying)
             {
-               audio.Play();
+               audio.PlayOneShot(boost);
             }
             
         }
@@ -61,44 +62,8 @@ public class movement : MonoBehaviour
         transform.Rotate(Vector3.forward * rotates * Time.deltaTime);
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        switch (collision.gameObject.tag)
-        {
-            case "Start":
-                Debug.Log("ON START");
-                break;
-            case "Finish":
-                next();
-                break;
-            case "fuel":
-                Debug.Log("Got fuel");
-                break;
-            default:
-                desstroyed();
-                Invoke("restart" , 1);
-                break;
-
-        }
-    }
-    void desstroyed()
-    {
-        GetComponent<movement>().enabled = true;
-    }
-    void restart()
-    {
-          SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-    void next()
-    {
-        int nextscene = SceneManager.GetActiveScene().buildIndex + 1;
-        if(nextscene == SceneManager.sceneCountInBuildSettings)
-        {
-            SceneManager.LoadScene(0);
-        }
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        
-    }
+    
+    
 
 
 }
