@@ -9,8 +9,8 @@ public class camswitch : MonoBehaviour
     [SerializeField] Camera cam2;
     void Start()
     {
-        cam1.enabled = true;
-        cam2.enabled = false;
+        cam1.enabled = false;
+        cam2.enabled = true ;
     }
 
     // Update is called once per frame
